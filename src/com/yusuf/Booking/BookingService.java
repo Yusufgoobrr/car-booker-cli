@@ -12,9 +12,10 @@ public class BookingService {
     public void showAllBookings(Booking[] bookings) {
         for (Booking booking : bookings) {
             System.out.println(
-                    booking.getBookingId() +
-                            " | UserId: " + booking.getUserPurchased() +
-                            " | CarId: " + booking.getCarPurchased()
+                    "BookingId: "+booking.getBookingId() + "\n" +
+                            "Date Of Purchase: "+booking.getTimeOfPurchase() +"\n"+
+                            "Booker's UserId: " + booking.getUserPurchased()+"\n"+
+                            "Booked CarId: " + booking.getCarPurchased()+"\n"
             );
         }
     }
@@ -25,9 +26,10 @@ public class BookingService {
         for (Booking booking : bookings) {
             if (booking.getUserPurchased().equals(userId)) {
                 System.out.println(
-                        booking.getBookingId() + " | " +
-                                booking.getTimeOfPurchase() +
-                                " | CarId: " + booking.getCarPurchased()
+                        "BookingId: "+booking.getBookingId() + "\n" +
+                                "Date Of Purchase: "+booking.getTimeOfPurchase() +"\n"+
+                                "Booker's UserId: " + userId+"\n"+
+                                "Booked CarId: " + booking.getCarPurchased()+"\n"
                 );
                 found = true;
             }

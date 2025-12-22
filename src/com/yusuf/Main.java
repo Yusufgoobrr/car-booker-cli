@@ -7,6 +7,7 @@ import com.yusuf.Car.CarService;
 import com.yusuf.User.User;
 import com.yusuf.User.UserService;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class Main {
         };
 
         Car[] cars = {
-                new Car(UUID.fromString("9d818235-ce3b-40e8-b74a-3674985c6bcd"), "Tofas", "Kulustur", 1000.9, true, false),
+                new Car(UUID.fromString("9d818235-ce3b-40e8-b74a-3674985c6bcd"), "Tofas", "Kulustur", 1000.9, false, false),
                 new Car(UUID.fromString("87cb62d9-d262-4174-b1b2-957f9e2a1f40"), "Tesla", "Model 3", 2000.21, false, true)
         };
 
@@ -80,6 +81,7 @@ public class Main {
                 case 6 -> userService.getAllUsers(users);
 
                 case 7 -> {
+
                     System.out.println("Thanks for using the app 😊");
                     return;
                 }
@@ -89,4 +91,5 @@ public class Main {
 
         } while (choice != 7);
     }
+
 }

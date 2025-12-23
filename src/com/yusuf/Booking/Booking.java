@@ -51,11 +51,11 @@ public class Booking {
 
     @Override
     public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", timeOfPurchase=" + timeOfPurchase +
-                ", userPurchased=" + userPurchased +
-                ", carPurchased=" + carPurchased +
-                '}';
+        return
+                "bookingId=" + bookingId + "\n" +
+                        "timeOfPurchase=" + timeOfPurchase + "\n" +
+                        "userPurchased=" + userPurchased + "\n" +
+                        "carPurchased=" + carPurchased;
     }
+
 }

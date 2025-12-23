@@ -1,12 +1,9 @@
 package com.yusuf.User;
 
 public class UserService {
+private final UserDAO userDAO = new UserDAO();
 
-    public void getAllUsers(User[] users) {
-        for (User user : users) {
-            System.out.println("UserId: " + user.getUserId() + "\n" +
-                    "Name: " + user.getName() + "\n" + "Surname: "
-                    + user.getSurname()+"\n");
-        }
+    public User[] getAllUsers() {
+     return  userDAO.findAllUsers();
     }
 }

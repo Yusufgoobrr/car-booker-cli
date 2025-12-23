@@ -1,49 +1,46 @@
 package com.yusuf.Booking;
 
 import com.yusuf.Car.Car;
+import com.yusuf.Car.CarDAO;
 import com.yusuf.User.User;
+import com.yusuf.User.UserDAO;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.UUID;
 
 public class BookingService {
+    private final BookingDAO bookingDAO = new BookingDAO();
+    private final UserDAO userDAO = new UserDAO();
+    private final CarDAO carDAO = new CarDAO();
 
-    public void showAllBookings(Booking[] bookings) {
-        for (Booking booking : bookings) {
-            System.out.println(
-                    "BookingId: "+booking.getBookingId() + "\n" +
-                            "Date Of Purchase: "+booking.getTimeOfPurchase() +"\n"+
-                            "Booker's UserId: " + booking.getUserPurchased()+"\n"+
-                            "Booked CarId: " + booking.getCarPurchased()+"\n"
-            );
-        }
+    public Booking[] showAllBookings() {
+        return bookingDAO.findAll();
     }
 
-    public void viewUserBookings(Booking[] bookings, UUID userId) {
-        boolean found = false;
-
-        for (Booking booking : bookings) {
+    public Booking[] viewUserBookings(UUID userId) {
+        int count = 0;
+        for (Booking booking : bookingDAO.findAll()) {
             if (booking.getUserPurchased().equals(userId)) {
-                System.out.println(
-                        "BookingId: "+booking.getBookingId() + "\n" +
-                                "Date Of Purchase: "+booking.getTimeOfPurchase() +"\n"+
-                                "Booker's UserId: " + userId+"\n"+
-                                "Booked CarId: " + booking.getCarPurchased()+"\n"
-                );
-                found = true;
+                count++;
             }
         }
-
-        if (!found) {
-            System.out.println("No bookings found for this user");
+        if(count==0){
+            return null;
         }
+        Booking[] userBookings = new Booking[count];
+        int index = 0;
+        for (Booking booking : bookingDAO.findAll()) {
+            if (booking.getUserPurchased().equals(userId)) {
+                userBookings[index++] = booking;
+            }
+        }
+        return userBookings;
     }
 
-    public Booking[] bookCar(Booking[] bookings, User[] users, Car[] cars, UUID userId, UUID carId) {
+    public Booking bookCar(UUID userId, UUID carId) {
 
         boolean userExists = false;
-        for (User user : users) {
+        for (User user : userDAO.findAllUsers()) {
             if (user.getUserId().equals(userId)) {
                 userExists = true;
                 break;
@@ -52,11 +49,11 @@ public class BookingService {
 
         if (!userExists) {
             System.out.println("User not found!");
-            return bookings;
+            return null;
         }
 
         Car selectedCar = null;
-        for (Car car : cars) {
+        for (Car car : carDAO.findAllCars()) {
             if (car.getCarId().equals(carId)) {
                 selectedCar = car;
                 break;
@@ -65,12 +62,12 @@ public class BookingService {
 
         if (selectedCar == null) {
             System.out.println("Car not found!");
-            return bookings;
+            return null;
         }
 
         if (selectedCar.isOccupied()) {
             System.out.println("Car is already occupied!");
-            return bookings;
+            return null;
         }
 
         Booking newBooking = new Booking(
@@ -80,11 +77,9 @@ public class BookingService {
                 carId
         );
 
-        bookings = Arrays.copyOf(bookings, bookings.length + 1);
-        bookings[bookings.length - 1] = newBooking;
+        bookingDAO.save(newBooking);
         selectedCar.setOccupied(true);
 
-        System.out.println("Booking created successfully!");
-        return bookings;
+        return newBooking;
     }
 }

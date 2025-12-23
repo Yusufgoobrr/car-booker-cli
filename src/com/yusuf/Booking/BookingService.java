@@ -5,7 +5,7 @@ import com.yusuf.Car.CarDAO;
 import com.yusuf.User.User;
 import com.yusuf.User.UserDAO;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class BookingService {
@@ -13,23 +13,23 @@ public class BookingService {
     private final UserDAO userDAO = new UserDAO();
     private final CarDAO carDAO = new CarDAO();
 
-    public Booking[] showAllBookings() {
-        return bookingDAO.findAll();
+    public Booking[] getAllBookings() {
+        return bookingDAO.getAllBookings();
     }
 
-    public Booking[] viewUserBookings(UUID userId) {
+    public Booking[] getUserBookings(UUID userId) {
         int count = 0;
-        for (Booking booking : bookingDAO.findAll()) {
+        for (Booking booking : bookingDAO.getAllBookings()) {
             if (booking.getUserPurchased().equals(userId)) {
                 count++;
             }
         }
-        if(count==0){
-            return null;
+        if (count == 0) {
+            return new Booking[0];
         }
         Booking[] userBookings = new Booking[count];
         int index = 0;
-        for (Booking booking : bookingDAO.findAll()) {
+        for (Booking booking : bookingDAO.getAllBookings()) {
             if (booking.getUserPurchased().equals(userId)) {
                 userBookings[index++] = booking;
             }
@@ -40,7 +40,7 @@ public class BookingService {
     public Booking bookCar(UUID userId, UUID carId) {
 
         boolean userExists = false;
-        for (User user : userDAO.findAllUsers()) {
+        for (User user : userDAO.getAllUsers()) {
             if (user.getUserId().equals(userId)) {
                 userExists = true;
                 break;
@@ -53,7 +53,7 @@ public class BookingService {
         }
 
         Car selectedCar = null;
-        for (Car car : carDAO.findAllCars()) {
+        for (Car car : carDAO.getAllCars()) {
             if (car.getCarId().equals(carId)) {
                 selectedCar = car;
                 break;
@@ -72,13 +72,13 @@ public class BookingService {
 
         Booking newBooking = new Booking(
                 UUID.randomUUID(),
-                LocalDate.now(),
+                LocalDateTime.now(),
                 userId,
                 carId
         );
 
         bookingDAO.save(newBooking);
-        selectedCar.setOccupied(true);
+        carDAO.setCarOccupied(carId);
 
         return newBooking;
     }

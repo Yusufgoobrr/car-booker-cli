@@ -70,12 +70,13 @@ public class Car {
 
     @Override
     public String toString() {
-        return
-                "carId=" + carId + "\n" +
-                        "brand=" + brand + "\n" +
-                        "model=" + model + "\n" +
-                        "price=" + price + "\n" +
-                        "occupied=" + occupied + "\n" +
-                        "electric=" + electric;
+        return "Car{" +
+                "carId=" + carId +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", price=" + price +
+                ", occupied=" + occupied +
+                ", electric=" + electric +
+                '}';
     }
 }

@@ -1,16 +1,18 @@
 package com.yusuf.Booking;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class Booking {
 
     private UUID bookingId;
-    private LocalDate timeOfPurchase;
+    private LocalDateTime timeOfPurchase;
     private UUID userPurchased;
     private UUID carPurchased;
 
-    public Booking(UUID bookingId, LocalDate timeOfPurchase, UUID userPurchased, UUID carPurchased) {
+    public Booking(UUID bookingId, LocalDateTime timeOfPurchase, UUID userPurchased, UUID carPurchased) {
         this.bookingId = bookingId;
         this.timeOfPurchase = timeOfPurchase;
         this.userPurchased = userPurchased;
@@ -25,11 +27,11 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public LocalDate getTimeOfPurchase() {
+    public LocalDateTime getTimeOfPurchase() {
         return timeOfPurchase;
     }
 
-    public void setTimeOfPurchase(LocalDate timeOfPurchase) {
+    public void setTimeOfPurchase(LocalDateTime timeOfPurchase) {
         this.timeOfPurchase = timeOfPurchase;
     }
 
@@ -51,11 +53,14 @@ public class Booking {
 
     @Override
     public String toString() {
-        return
-                "bookingId=" + bookingId + "\n" +
-                        "timeOfPurchase=" + timeOfPurchase + "\n" +
-                        "userPurchased=" + userPurchased + "\n" +
-                        "carPurchased=" + carPurchased;
-    }
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", timeOfPurchase=" + timeOfPurchase.format(formatter) +
+                ", userPurchased=" + userPurchased +
+                ", carBooked=" + carPurchased +
+                '}';
+    }
 }

@@ -3,8 +3,8 @@ package com.yusuf.Car;
 public class CarService {
     private final CarDAO carDAO = new CarDAO();
 
-    public Car[] showAvailableCars() {
-        Car[] cars = carDAO.findAllCars();
+    public Car[] getAvailableCars() {
+        Car[] cars = carDAO.getAllCars();
         int count = 0;
         for (Car car : cars) {
             if (!car.isOccupied()) {
@@ -12,7 +12,7 @@ public class CarService {
             }
         }
         if(count==0){
-            return null;
+            return new Car[0];
         }
 
         Car[] availableCars = new Car[count];
@@ -26,8 +26,8 @@ public class CarService {
         return availableCars;
     }
 
-    public Car[] showAvailableElectricCars() {
-        Car[] cars = carDAO.findAllCars();
+    public Car[] getAvailableElectricCars() {
+        Car[] cars = carDAO.getAllCars();
         int count = 0;
         for (Car car : cars) {
             if (car.isElectric() && !car.isOccupied()) {
@@ -35,7 +35,7 @@ public class CarService {
             }
         }
         if(count==0){
-            return null;
+            return new Car[0];
         }
         Car[] availableElectricCars = new Car[count];
         int index = 0;

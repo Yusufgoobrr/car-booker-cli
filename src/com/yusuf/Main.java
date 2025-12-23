@@ -56,7 +56,7 @@ public class Main {
                     System.out.print("Enter user Id: ");
                     UUID userId = UUID.fromString(scanner.next());
 
-                    var bookings = bookingService.viewUserBookings(userId);
+                    var bookings = bookingService.getUserBookings(userId);
 
                     if (bookings.length == 0) {
                         System.out.println("No bookings found for this user ❌");
@@ -69,7 +69,7 @@ public class Main {
                 }
 
                 case 3 -> {
-                    var bookings = bookingService.showAllBookings();
+                    var bookings = bookingService.getAllBookings();
 
                     if (bookings.length == 0) {
                         System.out.println("The booking list is empty ❌");
@@ -82,7 +82,7 @@ public class Main {
                 }
 
                 case 4 -> {
-                    var cars = carService.showAvailableCars();
+                    var cars = carService.getAvailableCars();
 
                     if (cars.length == 0) {
                         System.out.println("There are no available cars ❌");
@@ -95,7 +95,7 @@ public class Main {
                 }
 
                 case 5 -> {
-                    var cars = carService.showAvailableElectricCars();
+                    var cars = carService.getAvailableElectricCars();
 
                     if (cars.length == 0) {
                         System.out.println("No available electric cars ❌");

@@ -4,6 +4,7 @@ import com.yusuf.Car.Car;
 import com.yusuf.Car.CarDAO;
 import com.yusuf.Car.CarFileDataAccsessService;
 import com.yusuf.User.User;
+import com.yusuf.User.UserDAO;
 import com.yusuf.User.UserService;
 
 import java.time.LocalDateTime;
@@ -11,9 +12,15 @@ import java.util.UUID;
 
 public class BookingService {
 
-    private final BookingDAO bookingDAO = new BookingFileDataAccessService();
-    private final CarDAO carDAO = new CarFileDataAccsessService();
-    private final UserService userService = new UserService();
+    private final BookingDAO bookingDAO;
+    private final CarDAO carDAO;
+    private final UserDAO userDAO;
+
+    public BookingService(BookingDAO bookingDAO, CarDAO carDAO, UserDAO userDAO) {
+        this.bookingDAO = bookingDAO;
+        this.carDAO = carDAO;
+        this.userDAO = userDAO;
+    }
 
     public Booking[] getAllBookings() {
         return bookingDAO.getAllBookings();
@@ -48,7 +55,7 @@ public class BookingService {
     public Booking bookCar(UUID userId, UUID carId) {
 
         boolean userExists = false;
-        for (User user : userService.getAllUsers()) {
+        for (User user : userDAO.getAllUsers()) {
             if (user.getUserId().equals(userId)) {
                 userExists = true;
                 break;

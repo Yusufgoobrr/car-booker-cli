@@ -2,7 +2,6 @@ package com.yusuf.Car;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +12,7 @@ public class CarFileDataAccsessService implements CarDAO {
     @Override
     public List<Car> getAllCars() {
 
-        List<Car> cars = new ArrayList<>(2);
+        List<Car> cars = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -30,7 +29,7 @@ public class CarFileDataAccsessService implements CarDAO {
                         Boolean.parseBoolean(parts[5])
                 );
 
-cars.add(car);
+                cars.add(car);
             }
 
         } catch (IOException e) {
@@ -44,19 +43,12 @@ cars.add(car);
     public void setCarOccupied(UUID carId) {
 
         List<Car> cars = getAllCars();
-        boolean updated = false;
-
-        for (Car car : cars) {
-            if (car.getCarId().equals(carId)) {
-                car.setOccupied(true);
-                updated = true;
-                break;
-            }
-        }
-        if (!updated) {
+        if (!cars.contains(carId)) {
             System.out.println("Car not found");
             return;
         }
+        cars.stream().filter(car -> car.getCarId().equals(carId)).distinct().forEach(car -> car.setOccupied(true));
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Car car : cars) {
                 String line =

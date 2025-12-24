@@ -2,6 +2,7 @@ package com.yusuf.Car;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class CarService {
 
@@ -21,51 +22,19 @@ public class CarService {
 
     public List<Car> getAvailableCars() {
         List<Car> cars = carDAO.getAllCars();
-
-        int count = 0;
-        for (Car car : cars) {
-            if (!car.isOccupied()) {
-                count++;
-            }
-        }
-
-        if (count == 0) {
+        List<Car> availableCars = cars.stream().filter(car -> !car.isOccupied()).toList();
+        if (availableCars.isEmpty()) {
             return new ArrayList<>();
         }
-
-        List<Car> availableCars = new ArrayList<>(count);
-        int index = 0;
-
-        for (Car car : cars) {
-            if (!car.isOccupied()) {
-           availableCars.add(car);
-            }
-        }
-
         return availableCars;
     }
 
     public List<Car> getAvailableElectricCars() {
         List<Car> cars = carDAO.getAllCars();
+        List<Car> availableElectricCars = cars.stream().filter(car -> !car.isOccupied()&& car.isElectric()).toList();
 
-        int count = 0;
-        for (Car car : cars) {
-            if (car.isElectric() && !car.isOccupied()) {
-                count++;
-            }
-        }
-
-        if (count == 0) {
+        if (availableElectricCars.isEmpty()) {
             return new ArrayList<>();
-        }
-
-        List<Car> availableElectricCars = new ArrayList<>(count);
-        int index = 0;
-
-        for (Car car : cars) {
-            if (car.isElectric() && !car.isOccupied()) {
-             availableElectricCars.add(car);
-            }
         }
 
         return availableElectricCars;

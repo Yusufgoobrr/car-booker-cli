@@ -1,12 +1,11 @@
 package com.yusuf.Booking;
 
-import java.awt.print.Book;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class BookingFileDataAccessService implements BookingDAO {
 
@@ -30,7 +29,7 @@ public class BookingFileDataAccessService implements BookingDAO {
                         UUID.fromString(parts[3])
                 );
 
-               bookings.add(booking);
+          bookings.add(booking);
             }
 
         } catch (IOException e) {
@@ -44,28 +43,10 @@ public class BookingFileDataAccessService implements BookingDAO {
     public List<Booking> getUserBookings(UUID userId) {
 
         List<Booking> bookings = getAllBookings();
-        int count = 0;
-        for (Booking booking : bookings) {
-            if (booking.getUserPurchased().equals(userId)) {
-                count++;
-            }
+        List<Booking> userBookings = bookings.stream().filter((booking) -> booking.getUserPurchased().equals(userId)).collect(Collectors.toList());
+        if (userBookings.isEmpty()) {
+            return new ArrayList<>();
         }
-
-        if (count == 0) {
-            return new ArrayList<>();//come back to this
-        }
-
-        List<Booking> userBookings = new ArrayList<>(count);
-        int index = 0;
-
-        // collect matching bookings
-        for (Booking booking : getAllBookings()) {
-            if (booking.getUserPurchased().equals(userId)) {
-                userBookings.add(booking);
-                index++;
-            }
-        }
-
         return userBookings;
     }
 

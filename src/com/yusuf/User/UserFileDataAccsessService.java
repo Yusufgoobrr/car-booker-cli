@@ -15,8 +15,7 @@ public class UserFileDataAccsessService implements UserDAO {
     @Override
     public List<User> getAllUsers() {
 
-        List<User> users = new ArrayList<>(2);
-        int currentSize = 0;
+        List<User> users = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;

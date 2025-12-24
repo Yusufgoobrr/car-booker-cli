@@ -2,7 +2,11 @@ package com.yusuf.Car;
 
 public class CarService {
 
-    private final CarDAO carDAO = new CarFileDataAccsessService();
+    private final CarDAO carDAO;
+
+    public CarService(CarDAO carDAO) {
+        this.carDAO = carDAO;
+    }
 
     public Car[] getAllCars() {
         return carDAO.getAllCars();

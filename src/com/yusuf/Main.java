@@ -1,8 +1,10 @@
 package com.yusuf;
 
 import com.yusuf.Booking.BookingService;
-import com.yusuf.Car.CarService;
-import com.yusuf.User.UserService;
+import com.yusuf.Car.CarDAO;
+import com.yusuf.Car.CarFileDataAccsessService;
+import com.yusuf.User.UserDAO;
+import com.yusuf.User.UserFileDataAccsessService;
 
 import java.util.Scanner;
 import java.util.UUID;
@@ -12,9 +14,8 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-
-        UserService userService = new UserService();
-        CarService carService = new CarService();
+        UserDAO userService = new UserFileDataAccsessService();
+        CarDAO carService = new CarFileDataAccsessService();
         BookingService bookingService = new BookingService();
 
         int choice;
@@ -82,28 +83,36 @@ public class Main {
                 }
 
                 case 4 -> {
-                    var cars = carService.getAvailableCars();
+                    var cars = carService.getAllCars();
 
-                    if (cars.length == 0) {
-                        System.out.println("There are no available cars ❌");
-                    } else {
-                        for (var car : cars) {
+                    boolean found = false;
+                    for (var car : cars) {
+                        if (!car.isOccupied()) {
                             System.out.println(car);
                             System.out.println();
+                            found = true;
                         }
+                    }
+
+                    if (!found) {
+                        System.out.println("There are no available cars ❌");
                     }
                 }
 
                 case 5 -> {
-                    var cars = carService.getAvailableElectricCars();
+                    var cars = carService.getAllCars();
 
-                    if (cars.length == 0) {
-                        System.out.println("No available electric cars ❌");
-                    } else {
-                        for (var car : cars) {
+                    boolean found = false;
+                    for (var car : cars) {
+                        if (car.isElectric() && !car.isOccupied()) {
                             System.out.println(car);
                             System.out.println();
+                            found = true;
                         }
+                    }
+
+                    if (!found) {
+                        System.out.println("No available electric cars ❌");
                     }
                 }
 

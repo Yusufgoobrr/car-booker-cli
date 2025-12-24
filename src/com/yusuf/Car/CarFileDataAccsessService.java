@@ -1,0 +1,80 @@
+package com.yusuf.Car;
+
+import java.io.*;
+import java.util.Arrays;
+import java.util.UUID;
+
+public class CarFileDataAccsessService implements CarDAO {
+
+    private static final String FILE_PATH = "src/com/yusuf/Car/cars.txt";
+
+    @Override
+    public Car[] getAllCars() {
+
+        Car[] cars = new Car[2];
+        int currentSize = 0;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+
+                Car car = new Car(
+                        UUID.fromString(parts[0]),
+                        parts[1],
+                        parts[2],
+                        Double.parseDouble(parts[3]),
+                        Boolean.parseBoolean(parts[4]),
+                        Boolean.parseBoolean(parts[5])
+                );
+
+                if (currentSize >= cars.length) {
+                    cars = Arrays.copyOf(cars, cars.length + 2);
+                }
+
+                cars[currentSize++] = car;
+            }
+
+        } catch (IOException e) {
+            System.out.println("Failed to read cars file");
+        }
+
+        return Arrays.copyOf(cars, currentSize);
+    }
+
+    @Override
+    public void setCarOccupied(UUID carId) {
+
+        Car[] cars = getAllCars();
+        boolean updated = false;
+
+        for (Car car : cars) {
+            if (car.getCarId().equals(carId)) {
+                car.setOccupied(true);
+                updated = true;
+                break;
+            }
+        }
+        if (!updated) {
+            System.out.println("Car not found");
+            return;
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
+            for (Car car : cars) {
+                String line =
+                        car.getCarId() + "," +
+                                car.getBrand() + "," +
+                                car.getModel() + "," +
+                                car.getPrice() + "," +
+                                car.isOccupied() + "," +
+                                car.isElectric();
+
+                writer.write(line);
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Failed to update car occupancy");
+        }
+    }
+}

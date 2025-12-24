@@ -1,21 +1,12 @@
 package com.yusuf.Booking;
 
-import java.util.Arrays;
+import java.util.UUID;
 
-public class BookingDAO {
-    private Booking[] bookings = new Booking[100];
-    private int currentSize = 0;
+public interface BookingDAO {
 
-    public Booking[] getAllBookings() {
-        return Arrays.copyOf(bookings, currentSize);
-    }
+    Booking[] getAllBookings();
 
-    public void save(Booking booking) {
-        if (currentSize >= bookings.length) {
-            bookings = Arrays.copyOf(bookings, bookings.length + 100);
-        }
+    Booking[] getUserBookings(UUID userId);
 
-        bookings[currentSize] = booking;
-        currentSize++;
-    }
+    void save(Booking booking);
 }

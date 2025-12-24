@@ -19,9 +19,7 @@ public class BookingService {
         return bookingDAO.getAllBookings();
     }
 
-    // ✅ THIS IS YOUR METHOD — IT NEVER SHOULD HAVE LEFT
     public Booking[] getUserBookings(UUID userId) {
-
         Booking[] allBookings = bookingDAO.getAllBookings();
         int count = 0;
 
@@ -49,7 +47,6 @@ public class BookingService {
 
     public Booking bookCar(UUID userId, UUID carId) {
 
-        // 1️⃣ check user exists
         boolean userExists = false;
         for (User user : userService.getAllUsers()) {
             if (user.getUserId().equals(userId)) {
@@ -63,7 +60,6 @@ public class BookingService {
             return null;
         }
 
-        // 2️⃣ find car from FILE
         Car selectedCar = null;
         for (Car car : carDAO.getAllCars()) {
             if (car.getCarId().equals(carId)) {
@@ -82,7 +78,6 @@ public class BookingService {
             return null;
         }
 
-        // 3️⃣ create booking
         Booking booking = new Booking(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
@@ -90,10 +85,7 @@ public class BookingService {
                 carId
         );
 
-        // 4️⃣ persist booking to FILE
         bookingDAO.save(booking);
-
-        // 5️⃣ update car FILE
         carDAO.setCarOccupied(carId);
 
         return booking;

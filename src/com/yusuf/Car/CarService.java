@@ -1,41 +1,27 @@
 package com.yusuf.Car;
 
-import java.util.UUID;
+public class CarService {
 
-public class CarService implements CarDAO {
-    private static final Car[] cars;
+    private final CarDAO carDAO = new CarFileDataAccsessService();
 
-    static {
-        cars = new Car[]{
-                new Car(UUID.fromString("9d818235-ce3b-40e8-b74a-3674985c6bcd"), "Tofas", "Kulustur", 1000.9, false, false),
-                new Car(UUID.fromString("87cb62d9-d262-4174-b1b2-957f9e2a1f40"), "Tesla", "Model 3", 2000.21, false, true)
-
-        };
-    }
-
-
-    @Override
     public Car[] getAllCars() {
-        return cars;
+        return carDAO.getAllCars();
     }
 
-    @Override
-    public void setCarOccupied(UUID carId) {
-        for (Car car : cars) {
-            if (car.getCarId().equals(carId)) {
-                car.setOccupied(true);
-                break;
-            }
-        }
+    public void setCarOccupied(java.util.UUID carId) {
+        carDAO.setCarOccupied(carId);
     }
 
     public Car[] getAvailableCars() {
+        Car[] cars = carDAO.getAllCars();
+
         int count = 0;
         for (Car car : cars) {
             if (!car.isOccupied()) {
                 count++;
             }
         }
+
         if (count == 0) {
             return new Car[0];
         }
@@ -48,19 +34,24 @@ public class CarService implements CarDAO {
                 availableCars[index++] = car;
             }
         }
+
         return availableCars;
     }
 
     public Car[] getAvailableElectricCars() {
+        Car[] cars = carDAO.getAllCars();
+
         int count = 0;
         for (Car car : cars) {
             if (car.isElectric() && !car.isOccupied()) {
                 count++;
             }
         }
+
         if (count == 0) {
             return new Car[0];
         }
+
         Car[] availableElectricCars = new Car[count];
         int index = 0;
 
@@ -69,9 +60,7 @@ public class CarService implements CarDAO {
                 availableElectricCars[index++] = car;
             }
         }
+
         return availableElectricCars;
-
     }
-
-
 }

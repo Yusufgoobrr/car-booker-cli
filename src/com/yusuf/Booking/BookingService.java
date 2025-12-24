@@ -24,6 +24,12 @@ public class BookingService {
         this.userDAO = userDAO;
     }
 
+    public BookingService(BookingDAO bookingDAO, CarDAO carDAO, UserDAO userDAO) {
+        this.bookingDAO = bookingDAO;
+        this.carDAO = carDAO;
+        this.userDAO = userDAO;
+    }
+
     public List<Booking> getAllBookings() {
         return bookingDAO.getAllBookings();
     }

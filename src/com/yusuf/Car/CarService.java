@@ -1,5 +1,8 @@
 package com.yusuf.Car;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CarService {
 
     private final CarDAO carDAO;
@@ -8,7 +11,7 @@ public class CarService {
         this.carDAO = carDAO;
     }
 
-    public Car[] getAllCars() {
+    public List<Car> getAllCars() {
         return carDAO.getAllCars();
     }
 
@@ -16,8 +19,8 @@ public class CarService {
         carDAO.setCarOccupied(carId);
     }
 
-    public Car[] getAvailableCars() {
-        Car[] cars = carDAO.getAllCars();
+    public List<Car> getAvailableCars() {
+        List<Car> cars = carDAO.getAllCars();
 
         int count = 0;
         for (Car car : cars) {
@@ -27,23 +30,23 @@ public class CarService {
         }
 
         if (count == 0) {
-            return new Car[0];
+            return new ArrayList<>();
         }
 
-        Car[] availableCars = new Car[count];
+        List<Car> availableCars = new ArrayList<>(count);
         int index = 0;
 
         for (Car car : cars) {
             if (!car.isOccupied()) {
-                availableCars[index++] = car;
+           availableCars.add(car);
             }
         }
 
         return availableCars;
     }
 
-    public Car[] getAvailableElectricCars() {
-        Car[] cars = carDAO.getAllCars();
+    public List<Car> getAvailableElectricCars() {
+        List<Car> cars = carDAO.getAllCars();
 
         int count = 0;
         for (Car car : cars) {
@@ -53,15 +56,15 @@ public class CarService {
         }
 
         if (count == 0) {
-            return new Car[0];
+            return new ArrayList<>();
         }
 
-        Car[] availableElectricCars = new Car[count];
+        List<Car> availableElectricCars = new ArrayList<>(count);
         int index = 0;
 
         for (Car car : cars) {
             if (car.isElectric() && !car.isOccupied()) {
-                availableElectricCars[index++] = car;
+             availableElectricCars.add(car);
             }
         }
 

@@ -1,7 +1,9 @@
 package com.yusuf.Car;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class CarFileDataAccsessService implements CarDAO {
@@ -9,10 +11,9 @@ public class CarFileDataAccsessService implements CarDAO {
     private static final String FILE_PATH = "src/com/yusuf/Car/cars.txt";
 
     @Override
-    public Car[] getAllCars() {
+    public List<Car> getAllCars() {
 
-        Car[] cars = new Car[2];
-        int currentSize = 0;
+        List<Car> cars = new ArrayList<>(2);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -29,24 +30,20 @@ public class CarFileDataAccsessService implements CarDAO {
                         Boolean.parseBoolean(parts[5])
                 );
 
-                if (currentSize >= cars.length) {
-                    cars = Arrays.copyOf(cars, cars.length + 2);
-                }
-
-                cars[currentSize++] = car;
+cars.add(car);
             }
 
         } catch (IOException e) {
             System.out.println("Failed to read cars file");
         }
 
-        return Arrays.copyOf(cars, currentSize);
+        return cars;
     }
 
     @Override
     public void setCarOccupied(UUID carId) {
 
-        Car[] cars = getAllCars();
+        List<Car> cars = getAllCars();
         boolean updated = false;
 
         for (Car car : cars) {

@@ -8,6 +8,8 @@ import com.yusuf.User.UserDAO;
 import com.yusuf.User.UserService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class BookingService {
@@ -22,12 +24,12 @@ public class BookingService {
         this.userDAO = userDAO;
     }
 
-    public Booking[] getAllBookings() {
+    public List<Booking> getAllBookings() {
         return bookingDAO.getAllBookings();
     }
 
-    public Booking[] getUserBookings(UUID userId) {
-        Booking[] allBookings = bookingDAO.getAllBookings();
+    public List<Booking> getUserBookings(UUID userId) {
+        List<Booking> allBookings = bookingDAO.getAllBookings();
         int count = 0;
 
         for (Booking booking : allBookings) {
@@ -37,15 +39,16 @@ public class BookingService {
         }
 
         if (count == 0) {
-            return new Booking[0];
+            return new ArrayList<>();
         }
 
-        Booking[] userBookings = new Booking[count];
+        List<Booking> userBookings = new ArrayList<>(count);
         int index = 0;
 
         for (Booking booking : allBookings) {
             if (booking.getUserPurchased().equals(userId)) {
-                userBookings[index++] = booking;
+                userBookings.add(booking);
+                index++;
             }
         }
 

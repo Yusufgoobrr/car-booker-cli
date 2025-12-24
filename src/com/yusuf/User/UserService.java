@@ -1,5 +1,7 @@
 package com.yusuf.User;
 
+import java.util.List;
+
 public class UserService {
 
     private final UserDAO userDAO;
@@ -8,7 +10,7 @@ public class UserService {
         this.userDAO = userDAO;
     }
 
-    public User[] getAllUsers() {
+    public List<User> getAllUsers() {
         return userDAO.getAllUsers();
     }
 }

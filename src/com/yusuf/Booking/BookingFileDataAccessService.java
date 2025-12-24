@@ -1,8 +1,11 @@
 package com.yusuf.Booking;
 
+import java.awt.print.Book;
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class BookingFileDataAccessService implements BookingDAO {
@@ -10,10 +13,9 @@ public class BookingFileDataAccessService implements BookingDAO {
     private static final String FILE_PATH = "src/com/yusuf/Booking/bookings.txt";
 
     @Override
-    public Booking[] getAllBookings() {
+    public List<Booking> getAllBookings() {
 
-        Booking[] bookings = new Booking[100];
-        int currentSize = 0;
+        List<Booking> bookings = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
@@ -28,44 +30,39 @@ public class BookingFileDataAccessService implements BookingDAO {
                         UUID.fromString(parts[3])
                 );
 
-                if (currentSize >= bookings.length) {
-                    bookings = Arrays.copyOf(bookings, bookings.length + 100);
-                }
-
-                bookings[currentSize++] = booking;
+               bookings.add(booking);
             }
 
         } catch (IOException e) {
             System.out.println("Failed to read bookings file");
         }
 
-        return Arrays.copyOf(bookings, currentSize);
+        return bookings;
     }
 
     @Override
-    public Booking[] getUserBookings(UUID userId) {
+    public List<Booking> getUserBookings(UUID userId) {
 
-        Booking[] allBookings = getAllBookings();
+        List<Booking> bookings = getAllBookings();
         int count = 0;
-
-        // count matching bookings
-        for (Booking booking : allBookings) {
+        for (Booking booking : bookings) {
             if (booking.getUserPurchased().equals(userId)) {
                 count++;
             }
         }
 
         if (count == 0) {
-            return new Booking[0];
+            return new ArrayList<>();//come back to this
         }
 
-        Booking[] userBookings = new Booking[count];
+        List<Booking> userBookings = new ArrayList<>(count);
         int index = 0;
 
         // collect matching bookings
-        for (Booking booking : allBookings) {
+        for (Booking booking : getAllBookings()) {
             if (booking.getUserPurchased().equals(userId)) {
-                userBookings[index++] = booking;
+                userBookings.add(booking);
+                index++;
             }
         }
 

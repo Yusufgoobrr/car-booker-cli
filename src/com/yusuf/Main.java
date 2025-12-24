@@ -65,7 +65,7 @@ public class Main {
 
                     var bookings = bookingService.getUserBookings(userId);
 
-                    if (bookings.length == 0) {
+                    if (bookings.size() == 0) {
                         System.out.println("No bookings found for this user ❌");
                     } else {
                         for (var booking : bookings) {
@@ -78,7 +78,7 @@ public class Main {
                 case 3 -> {
                     var bookings = bookingService.getAllBookings();
 
-                    if (bookings.length == 0) {
+                    if (bookings.size() == 0) {
                         System.out.println("The booking list is empty ❌");
                     } else {
                         for (var booking : bookings) {
@@ -125,7 +125,7 @@ public class Main {
                 case 6 -> {
                     var users = userService.getAllUsers();
 
-                    if (users.length == 0) {
+                    if (users.size() == 0) {
                         System.out.println("There are no users in the system ❌");
                     } else {
                         for (var user : users) {

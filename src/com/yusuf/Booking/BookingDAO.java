@@ -1,12 +1,13 @@
 package com.yusuf.Booking;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface BookingDAO {
 
-    Booking[] getAllBookings();
+    List<Booking> getAllBookings();
 
-    Booking[] getUserBookings(UUID userId);
+    List<Booking> getUserBookings(UUID userId);
 
     void save(Booking booking);
 }

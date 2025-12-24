@@ -1,17 +1,28 @@
 package com.yusuf.Car;
 
 public class CarService {
-    private final CarDAO carDAO = new CarDAO();
+
+    private final CarDAO carDAO = new CarFileDataAccsessService();
+
+    public Car[] getAllCars() {
+        return carDAO.getAllCars();
+    }
+
+    public void setCarOccupied(java.util.UUID carId) {
+        carDAO.setCarOccupied(carId);
+    }
 
     public Car[] getAvailableCars() {
         Car[] cars = carDAO.getAllCars();
+
         int count = 0;
         for (Car car : cars) {
             if (!car.isOccupied()) {
                 count++;
             }
         }
-        if(count==0){
+
+        if (count == 0) {
             return new Car[0];
         }
 
@@ -23,20 +34,24 @@ public class CarService {
                 availableCars[index++] = car;
             }
         }
+
         return availableCars;
     }
 
     public Car[] getAvailableElectricCars() {
         Car[] cars = carDAO.getAllCars();
+
         int count = 0;
         for (Car car : cars) {
             if (car.isElectric() && !car.isOccupied()) {
                 count++;
             }
         }
-        if(count==0){
+
+        if (count == 0) {
             return new Car[0];
         }
+
         Car[] availableElectricCars = new Car[count];
         int index = 0;
 
@@ -45,7 +60,7 @@ public class CarService {
                 availableElectricCars[index++] = car;
             }
         }
-        return availableElectricCars;
 
+        return availableElectricCars;
     }
 }

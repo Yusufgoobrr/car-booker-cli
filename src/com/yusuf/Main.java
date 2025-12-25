@@ -7,6 +7,7 @@ import com.yusuf.Car.CarDAO;
 import com.yusuf.Car.CarFileDataAccsessService;
 import com.yusuf.Car.CarService;
 import com.yusuf.User.UserDAO;
+import com.yusuf.User.UserFakerDataAccsessService;
 import com.yusuf.User.UserFileDataAccsessService;
 import com.yusuf.User.UserService;
 
@@ -18,7 +19,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
-        UserDAO userDAO = new UserFileDataAccsessService();
+        UserDAO userDAO = new UserFakerDataAccsessService();
         CarDAO carDAO = new CarFileDataAccsessService();
         BookingDAO bookingDAO = new BookingFileDataAccessService();
         CarService carService = new CarService(carDAO);

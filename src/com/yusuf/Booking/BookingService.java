@@ -61,7 +61,7 @@ public class BookingService {
             );
 
             bookingDAO.save(booking);
-            carDAO.setCarOccupied(foundCar.getFirst().getCarId());
+            carDAO.setCarOccupied(foundCar.get(0).getCarId());
 
             return booking;
         }

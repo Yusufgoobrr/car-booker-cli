@@ -24,31 +24,27 @@ class BookingFileDataAccessServiceTest {
         List<Booking> bookings = bookingDAO.getAllBookings();
 
         // then
-        assertThat(bookings)
-                .isNotNull()
-                .isNotEmpty();
+        assertThat(bookings).isNotEmpty();
     }
 
     @Test
     void canGetBookingsForSpecificUser() {
-        // given
-        UUID userId =
-                UUID.fromString("11111111-1111-1111-1111-111111111111");
+        // given (MUST match file data → KEEP hard-coded)
+        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
 
         // when
         List<Booking> userBookings = bookingDAO.getUserBookings(userId);
 
         // then
         assertThat(userBookings)
-                .isNotNull()
-                .allMatch(b -> b.getUserPurchased().equals(userId));
+                .extracting(Booking::getUserPurchased)
+                .containsOnly(userId);
     }
 
     @Test
     void canReturnEmptyListIfUserHasNoBookings() {
-        // given
-        UUID nonExistingUser =
-                UUID.fromString("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
+        // given (reviewer: UUID.random)
+        UUID nonExistingUser = UUID.randomUUID();
 
         // when
         List<Booking> bookings = bookingDAO.getUserBookings(nonExistingUser);
@@ -63,11 +59,12 @@ class BookingFileDataAccessServiceTest {
         Booking booking = new Booking(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
-                UUID.fromString("11111111-1111-1111-1111-111111111111"),
-                UUID.fromString("2f3c1c6e-8c2a-4d3b-9c9f-3c7e8a1b4e21")
-        );
+                UUID.randomUUID(),
+                UUID.randomUUID()
+                );
 
         int sizeBefore = bookingDAO.getAllBookings().size();
+        int expectedSize = sizeBefore + 1;
 
         // when
         bookingDAO.save(booking);
@@ -76,7 +73,8 @@ class BookingFileDataAccessServiceTest {
         List<Booking> bookingsAfter = bookingDAO.getAllBookings();
 
         assertThat(bookingsAfter)
-                .hasSize(sizeBefore + 1)
-                .anyMatch(b -> b.getBookingId().equals(booking.getBookingId()));
+                .hasSize(expectedSize)
+                .extracting(Booking::getBookingId)
+                .contains(booking.getBookingId());
     }
 }

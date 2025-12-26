@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,9 +24,10 @@ class CarServiceTest {
 
         // then
         assertThat(availableCars)
-                .isNotNull()
+                .hasSize(6)
                 .allMatch(car -> !car.isOccupied());
     }
+
 
     @Test
     void canReturnOnlyAvailableElectricCars() {
@@ -36,7 +36,8 @@ class CarServiceTest {
 
         // then
         assertThat(availableElectricCars)
-                .isNotNull()
-                .allMatch(car -> !car.isOccupied() && car.isElectric());
+                .isNotEmpty()
+                .allMatch(car -> !car.isOccupied())
+                .allMatch(Car::isElectric);
     }
 }

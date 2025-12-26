@@ -1,5 +1,6 @@
 package com.yusuf.car;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Car {
@@ -78,5 +79,17 @@ public class Car {
                 ", occupied=" + occupied +
                 ", electric=" + electric +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Double.compare(price, car.price) == 0 && occupied == car.occupied && electric == car.electric && Objects.equals(carId, car.carId) && Objects.equals(brand, car.brand) && Objects.equals(model, car.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(carId, brand, model, price, occupied, electric);
     }
 }

@@ -2,6 +2,7 @@ package com.yusuf.booking;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Booking {
@@ -61,5 +62,17 @@ public class Booking {
                 ", userPurchased=" + userPurchased +
                 ", carBooked=" + carPurchased +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Booking booking = (Booking) o;
+        return Objects.equals(bookingId, booking.bookingId) && Objects.equals(timeOfPurchase, booking.timeOfPurchase) && Objects.equals(userPurchased, booking.userPurchased) && Objects.equals(carPurchased, booking.carPurchased);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookingId, timeOfPurchase, userPurchased, carPurchased);
     }
 }

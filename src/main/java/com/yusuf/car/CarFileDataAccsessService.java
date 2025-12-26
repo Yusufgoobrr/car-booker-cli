@@ -10,7 +10,7 @@ public class CarFileDataAccsessService implements CarDAO {
 
     private final String FILE_PATH =
             Objects.requireNonNull(
-                    getClass().getClassLoader().getResource("bookings.txt")
+                    getClass().getClassLoader().getResource("cars.txt")
             ).getPath();
 
     @Override

@@ -12,7 +12,7 @@ public class UserFileDataAccsessService implements UserDAO {
 
     private final String FILE_PATH =
             Objects.requireNonNull(
-                    getClass().getClassLoader().getResource("bookings.txt")
+                    getClass().getClassLoader().getResource("users.txt")
             ).getPath();
 
     @Override

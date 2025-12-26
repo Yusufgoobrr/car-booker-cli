@@ -1,9 +1,9 @@
-package com.yusuf.Booking;
+package com.yusuf.booking;
 
-import com.yusuf.Car.Car;
-import com.yusuf.Car.CarDAO;
-import com.yusuf.User.User;
-import com.yusuf.User.UserDAO;
+import com.yusuf.car.Car;
+import com.yusuf.car.CarDAO;
+import com.yusuf.user.User;
+import com.yusuf.user.UserDAO;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

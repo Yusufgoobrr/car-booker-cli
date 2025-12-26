@@ -1,13 +1,17 @@
-package com.yusuf.Car;
+package com.yusuf.car;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class CarFileDataAccsessService implements CarDAO {
 
-    private static final String FILE_PATH = "src/com/yusuf/Car/cars.txt";
+    private final String FILE_PATH =
+            Objects.requireNonNull(
+                    getClass().getClassLoader().getResource("bookings.txt")
+            ).getPath();
 
     @Override
     public List<Car> getAllCars() {

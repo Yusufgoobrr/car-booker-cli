@@ -1,4 +1,4 @@
-package com.yusuf.User;
+package com.yusuf.user;
 
 import com.github.javafaker.Faker;
 

@@ -1,4 +1,4 @@
-package com.yusuf.Booking;
+package com.yusuf.booking;
 
 import java.util.List;
 import java.util.UUID;

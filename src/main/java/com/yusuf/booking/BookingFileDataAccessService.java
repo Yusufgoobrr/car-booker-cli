@@ -1,16 +1,19 @@
-package com.yusuf.Booking;
+package com.yusuf.booking;
 
-import java.awt.print.Book;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class BookingFileDataAccessService implements BookingDAO {
 
-    private static final String FILE_PATH = "src/com/yusuf/Booking/bookings.txt";
+    private final String FILE_PATH =
+            Objects.requireNonNull(
+                    getClass().getClassLoader().getResource("bookings.txt")
+            ).getPath();
 
     @Override
     public List<Booking> getAllBookings() {

@@ -1,15 +1,14 @@
 package com.yusuf;
 
-import com.yusuf.Booking.BookingDAO;
-import com.yusuf.Booking.BookingFileDataAccessService;
-import com.yusuf.Booking.BookingService;
-import com.yusuf.Car.CarDAO;
-import com.yusuf.Car.CarFileDataAccsessService;
-import com.yusuf.Car.CarService;
-import com.yusuf.User.UserDAO;
-import com.yusuf.User.UserFakerDataAccsessService;
-import com.yusuf.User.UserFileDataAccsessService;
-import com.yusuf.User.UserService;
+import com.yusuf.booking.BookingDAO;
+import com.yusuf.booking.BookingFileDataAccessService;
+import com.yusuf.booking.BookingService;
+import com.yusuf.car.CarDAO;
+import com.yusuf.car.CarFileDataAccsessService;
+import com.yusuf.car.CarService;
+import com.yusuf.user.UserDAO;
+import com.yusuf.user.UserFakerDataAccsessService;
+import com.yusuf.user.UserService;
 
 import java.util.Scanner;
 import java.util.UUID;

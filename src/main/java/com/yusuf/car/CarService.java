@@ -1,8 +1,7 @@
-package com.yusuf.Car;
+package com.yusuf.car;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class CarService {
 

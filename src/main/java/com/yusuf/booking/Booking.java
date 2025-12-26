@@ -1,4 +1,4 @@
-package com.yusuf.Booking;
+package com.yusuf.booking;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

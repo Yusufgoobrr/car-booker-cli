@@ -1,4 +1,4 @@
-package com.yusuf.User;
+package com.yusuf.user;
 
 import java.util.UUID;
 

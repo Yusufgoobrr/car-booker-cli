@@ -1,16 +1,19 @@
-package com.yusuf.User;
+package com.yusuf.user;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserFileDataAccsessService implements UserDAO {
 
-    private static final String FILE_PATH = "src/com/yusuf/User/users.txt";
+    private final String FILE_PATH =
+            Objects.requireNonNull(
+                    getClass().getClassLoader().getResource("bookings.txt")
+            ).getPath();
 
     @Override
     public List<User> getAllUsers() {

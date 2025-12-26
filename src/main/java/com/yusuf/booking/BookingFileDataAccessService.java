@@ -2,6 +2,7 @@ package com.yusuf.booking;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,13 +23,14 @@ public class BookingFileDataAccessService implements BookingDAO {
 
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             String line;
-
+            DateTimeFormatter formatter =
+                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
                 Booking booking = new Booking(
                         UUID.fromString(parts[0]),
-                        LocalDateTime.parse(parts[1]),
+                        LocalDateTime.parse(parts[1], formatter),
                         UUID.fromString(parts[2]),
                         UUID.fromString(parts[3])
                 );

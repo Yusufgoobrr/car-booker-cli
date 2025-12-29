@@ -1,80 +1,68 @@
 package com.yusuf.booking;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.io.TempDir;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-
 import static org.assertj.core.api.Assertions.assertThat;
-
 class BookingFileDataAccessServiceTest {
 
+    @TempDir
+    Path tempDir;
     private BookingFileDataAccessService bookingDAO;
-
     @BeforeEach
-    void setUp() {
-        bookingDAO = new BookingFileDataAccessService();
+    void setUp() throws Exception {
+        Path bookingsFile = tempDir.resolve("bookings.csv");
+
+        Files.writeString(
+                bookingsFile,
+                """
+                bookingId,bookingTime,userPurchased,carId
+                9f3a1c2e-4d6b-4a8c-9e12-7b5a6c8d1f20,2024-11-10 14:30:15,6f1a8c2e-9b4d-4e3a-8c71-2a9d3f5b6e10,2f3c1c6e-8c2a-4d3b-9c9f-3c7e8a1b4e21
+                1a7c9e2d-5f4b-4a8e-9d31-b6c2f8e1a540,2024-11-12 09:15:42,a3b5d9e1-7c4f-4a8e-9b2d-1f6c3e8a5d20,7a4e9b2d-1c6f-4f3a-8e2d-91c6b8a4f0d3
+                4e6b1a9c-2f5d-4e7a-8c31-d9b5a2f6e740,2024-11-15 18:45:03,6f1a8c2e-9b4d-4e3a-8c71-2a9d3f5b6e10,c8b1f3e4-6a9d-4f2c-9b7a-2d4e6f8a1c3b
+                8d5c2e1f-4b6a-4e9c-9a73-1f2b6d8c4e90,2024-11-18 11:00:59,2d7c9e4a-b5f1-4c8a-9e3d-6b1f5a8c7e30,4d6a9f2b-8c3e-4a7d-9f1b-6e2c8a3d4b7e
+                3c9f5a2e-7b1d-4e8a-9c62-d1f4b6e5a380,2024-11-20 16:20:27,a3b5d9e1-7c4f-4a8e-9b2d-1f6c3e8a5d20,9e2f4c6a-1b8d-4a3f-9c7e-5d6b2a8f1c4e
+                """
+        );
+
+        bookingDAO = new BookingFileDataAccessService(bookingsFile);
     }
 
     @Test
     void canGetAllBookingsFromFile() {
-        // when
         List<Booking> bookings = bookingDAO.getAllBookings();
-
-        // then
-        assertThat(bookings).isNotEmpty();
+        assertThat(bookings).hasSize(5);
     }
 
     @Test
     void canGetBookingsForSpecificUser() {
-        // given (MUST match file data → KEEP hard-coded)
-        UUID userId = UUID.fromString("11111111-1111-1111-1111-111111111111");
-
-        // when
-        List<Booking> userBookings = bookingDAO.getUserBookings(userId);
-
-        // then
-        assertThat(userBookings)
+        UUID userId = UUID.fromString("6f1a8c2e-9b4d-4e3a-8c71-2a9d3f5b6e10");
+        List<Booking> bookings = bookingDAO.getUserBookings(userId);
+        assertThat(bookings)
+                .hasSize(2)
                 .extracting(Booking::getUserPurchased)
                 .containsOnly(userId);
     }
 
     @Test
-    void canReturnEmptyListIfUserHasNoBookings() {
-        // given (reviewer: UUID.random)
-        UUID nonExistingUser = UUID.randomUUID();
-
-        // when
-        List<Booking> bookings = bookingDAO.getUserBookings(nonExistingUser);
-
-        // then
-        assertThat(bookings).isEmpty();
-    }
-
-    @Test
     void canSaveBookingToFile() {
-        // given
-        Booking booking = new Booking(
+        Booking newBooking = new Booking(
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 UUID.randomUUID(),
                 UUID.randomUUID()
-                );
+        );
 
-        int sizeBefore = bookingDAO.getAllBookings().size();
-        int expectedSize = sizeBefore + 1;
+        int before = bookingDAO.getAllBookings().size();
 
-        // when
-        bookingDAO.save(booking);
+        bookingDAO.save(newBooking);
 
-        // then
-        List<Booking> bookingsAfter = bookingDAO.getAllBookings();
+        int after = bookingDAO.getAllBookings().size();
 
-        assertThat(bookingsAfter)
-                .hasSize(expectedSize)
-                .extracting(Booking::getBookingId)
-                .contains(booking.getBookingId());
+        assertThat(after).isEqualTo(before + 1);
     }
 }

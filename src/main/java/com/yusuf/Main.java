@@ -18,12 +18,17 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
+
+        // ✅ production constructors
         UserDAO userDAO = new UserFakerDataAccsessService();
         CarDAO carDAO = new CarFileDataAccsessService();
         BookingDAO bookingDAO = new BookingFileDataAccessService();
+
         CarService carService = new CarService(carDAO);
         UserService userService = new UserService(userDAO);
-        BookingService bookingService = new BookingService(bookingDAO, carDAO, userDAO);
+        BookingService bookingService =
+                new BookingService(bookingDAO, carDAO, userDAO);
+
         int choice;
 
         do {
@@ -65,74 +70,37 @@ public class Main {
 
                     var bookings = bookingService.getUserBookings(userId);
 
-                    if (bookings.size() == 0) {
-                        System.out.println("No bookings found for this user ❌");
+                    if (bookings.isEmpty()) {
+                        System.out.println("No bookings found ❌");
                     } else {
-                        for (var booking : bookings) {
-                            System.out.println(booking);
-                            System.out.println();
-                        }
+                        bookings.forEach(System.out::println);
                     }
                 }
 
                 case 3 -> {
                     var bookings = bookingService.getAllBookings();
 
-                    if (bookings.size() == 0) {
+                    if (bookings.isEmpty()) {
                         System.out.println("The booking list is empty ❌");
                     } else {
-                        for (var booking : bookings) {
-                            System.out.println(booking);
-                            System.out.println();
-                        }
+                        bookings.forEach(System.out::println);
                     }
                 }
 
                 case 4 -> {
-                    var cars = carService.getAllCars();
-
-                    boolean found = false;
-                    for (var car : cars) {
-                        if (!car.isOccupied()) {
-                            System.out.println(car);
-                            System.out.println();
-                            found = true;
-                        }
-                    }
-
-                    if (!found) {
-                        System.out.println("There are no available cars ❌");
-                    }
+                    carService.getAllCars().stream()
+                            .filter(car -> !car.isOccupied())
+                            .forEach(System.out::println);
                 }
 
                 case 5 -> {
-                    var cars = carService.getAllCars();
-
-                    boolean found = false;
-                    for (var car : cars) {
-                        if (car.isElectric() && !car.isOccupied()) {
-                            System.out.println(car);
-                            System.out.println();
-                            found = true;
-                        }
-                    }
-
-                    if (!found) {
-                        System.out.println("No available electric cars ❌");
-                    }
+                    carService.getAllCars().stream()
+                            .filter(car -> car.isElectric() && !car.isOccupied())
+                            .forEach(System.out::println);
                 }
 
                 case 6 -> {
-                    var users = userService.getAllUsers();
-
-                    if (users.size() == 0) {
-                        System.out.println("There are no users in the system ❌");
-                    } else {
-                        for (var user : users) {
-                            System.out.println(user);
-                            System.out.println();
-                        }
-                    }
+                    userService.getAllUsers().forEach(System.out::println);
                 }
 
                 case 7 -> {

@@ -8,10 +8,16 @@ import java.util.UUID;
 
 public class CarFileDataAccsessService implements CarDAO {
 
-    private final String FILE_PATH =
-            Objects.requireNonNull(
-                    getClass().getClassLoader().getResource("cars.txt")
-            ).getPath();
+    private final String FILE_PATH;
+    public CarFileDataAccsessService() {
+        this.FILE_PATH =
+                Objects.requireNonNull(
+                        getClass().getClassLoader().getResource("cars.txt")
+                ).getPath();
+    }
+    public CarFileDataAccsessService(String FILE_PATH) {
+        this.FILE_PATH = FILE_PATH;
+    }
 
     @Override
     public List<Car> getAllCars() {
@@ -47,11 +53,20 @@ public class CarFileDataAccsessService implements CarDAO {
     public void setCarOccupied(UUID carId) {
 
         List<Car> cars = getAllCars();
-        if (!cars.contains(carId)) {
+
+        // ✅ FIXED: correct existence check
+        boolean exists = cars.stream()
+                .anyMatch(car -> car.getCarId().equals(carId));
+
+        if (!exists) {
             System.out.println("Car not found");
             return;
         }
-        cars.stream().filter(car -> car.getCarId().equals(carId)).distinct().forEach(car -> car.setOccupied(true));
+
+        // mark occupied
+        cars.stream()
+                .filter(car -> car.getCarId().equals(carId))
+                .forEach(car -> car.setOccupied(true));
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
             for (Car car : cars) {

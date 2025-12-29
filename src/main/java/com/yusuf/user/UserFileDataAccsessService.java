@@ -10,10 +10,20 @@ import java.util.UUID;
 
 public class UserFileDataAccsessService implements UserDAO {
 
-    private final String FILE_PATH =
-            Objects.requireNonNull(
-                    getClass().getClassLoader().getResource("users.txt")
-            ).getPath();
+    private final String FILE_PATH;
+
+    // ✅ default constructor (production use)
+    public UserFileDataAccsessService() {
+        this.FILE_PATH =
+                Objects.requireNonNull(
+                        getClass().getClassLoader().getResource("users.txt")
+                ).getPath();
+    }
+
+    // ✅ constructor for tests (temp file)
+    public UserFileDataAccsessService(String filePath) {
+        this.FILE_PATH = filePath;
+    }
 
     @Override
     public List<User> getAllUsers() {
@@ -41,5 +51,4 @@ public class UserFileDataAccsessService implements UserDAO {
 
         return users;
     }
-
 }

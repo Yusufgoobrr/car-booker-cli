@@ -1,30 +1,50 @@
 package com.yusuf.booking;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class BookingFileDataAccessService implements BookingDAO {
 
-    private final String FILE_PATH =
-            Objects.requireNonNull(
-                    getClass().getClassLoader().getResource("bookings.txt")
-            ).getPath();
+    private final Path FILE_PATH;
+
+    // ✅ production constructor
+    public BookingFileDataAccessService() {
+        try {
+            this.FILE_PATH = Path.of(
+                    Objects.requireNonNull(
+                            getClass().getClassLoader().getResource("bookings.txt")
+                    ).toURI()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load bookings.txt", e);
+        }
+    }
+
+    // ✅ test constructor
+    public BookingFileDataAccessService(Path filePath) {
+        this.FILE_PATH = filePath;
+    }
 
     @Override
     public List<Booking> getAllBookings() {
 
         List<Booking> bookings = new ArrayList<>();
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
+        try (BufferedReader reader = Files.newBufferedReader(FILE_PATH)) {
             String line;
-            DateTimeFormatter formatter =
-                    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
 
@@ -35,7 +55,7 @@ public class BookingFileDataAccessService implements BookingDAO {
                         UUID.fromString(parts[3])
                 );
 
-          bookings.add(booking);
+                bookings.add(booking);
             }
 
         } catch (IOException e) {
@@ -47,26 +67,31 @@ public class BookingFileDataAccessService implements BookingDAO {
 
     @Override
     public List<Booking> getUserBookings(UUID userId) {
+        List<Booking> result = new ArrayList<>();
 
-        List<Booking> bookings = getAllBookings();
-        List<Booking> userBookings = bookings.stream().filter((booking) -> booking.getUserPurchased().equals(userId)).collect(Collectors.toList());
-        if (userBookings.isEmpty()) {
-            return new ArrayList<>();
+        for (Booking booking : getAllBookings()) {
+            if (booking.getUserPurchased().equals(userId)) {
+                result.add(booking);
+            }
         }
-        return userBookings;
+
+        return result;
     }
 
     @Override
     public void save(Booking booking) {
 
+        DateTimeFormatter formatter =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         String line =
                 booking.getBookingId() + "," +
-                        booking.getTimeOfPurchase() + "," +
+                        booking.getTimeOfPurchase().format(formatter) + "," +
                         booking.getUserPurchased() + "," +
                         booking.getCarPurchased();
 
         try (BufferedWriter writer =
-                     new BufferedWriter(new FileWriter(FILE_PATH, true))) {
+                     Files.newBufferedWriter(FILE_PATH, StandardOpenOption.APPEND)) {
 
             writer.write(line);
             writer.newLine();

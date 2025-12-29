@@ -12,7 +12,6 @@ public class UserFileDataAccsessService implements UserDAO {
 
     private final String FILE_PATH;
 
-    // ✅ default constructor (production use)
     public UserFileDataAccsessService() {
         this.FILE_PATH =
                 Objects.requireNonNull(
@@ -20,7 +19,6 @@ public class UserFileDataAccsessService implements UserDAO {
                 ).getPath();
     }
 
-    // ✅ constructor for tests (temp file)
     public UserFileDataAccsessService(String filePath) {
         this.FILE_PATH = filePath;
     }

@@ -16,8 +16,6 @@ import java.util.UUID;
 public class BookingFileDataAccessService implements BookingDAO {
 
     private final Path FILE_PATH;
-
-    // ✅ production constructor
     public BookingFileDataAccessService() {
         try {
             this.FILE_PATH = Path.of(
@@ -29,8 +27,6 @@ public class BookingFileDataAccessService implements BookingDAO {
             throw new RuntimeException("Failed to load bookings.txt", e);
         }
     }
-
-    // ✅ test constructor
     public BookingFileDataAccessService(Path filePath) {
         this.FILE_PATH = filePath;
     }
@@ -39,6 +35,7 @@ public class BookingFileDataAccessService implements BookingDAO {
     public List<Booking> getAllBookings() {
 
         List<Booking> bookings = new ArrayList<>();
+
         DateTimeFormatter formatter =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

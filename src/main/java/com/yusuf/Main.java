@@ -19,7 +19,6 @@ public class Main {
 
         Scanner scanner = new Scanner(System.in);
 
-        // ✅ production constructors
         UserDAO userDAO = new UserFakerDataAccsessService();
         CarDAO carDAO = new CarFileDataAccsessService();
         BookingDAO bookingDAO = new BookingFileDataAccessService();

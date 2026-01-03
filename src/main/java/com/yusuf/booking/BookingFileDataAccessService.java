@@ -15,7 +15,11 @@ import java.util.UUID;
 
 public class BookingFileDataAccessService implements BookingDAO {
 
+    private static final DateTimeFormatter DATE_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     private final Path FILE_PATH;
+
     public BookingFileDataAccessService() {
         try {
             this.FILE_PATH = Path.of(
@@ -27,17 +31,14 @@ public class BookingFileDataAccessService implements BookingDAO {
             throw new RuntimeException("Failed to load bookings.txt", e);
         }
     }
+
     public BookingFileDataAccessService(Path filePath) {
         this.FILE_PATH = filePath;
     }
 
     @Override
     public List<Booking> getAllBookings() {
-
         List<Booking> bookings = new ArrayList<>();
-
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         try (BufferedReader reader = Files.newBufferedReader(FILE_PATH)) {
             String line;
@@ -47,7 +48,7 @@ public class BookingFileDataAccessService implements BookingDAO {
 
                 Booking booking = new Booking(
                         UUID.fromString(parts[0]),
-                        LocalDateTime.parse(parts[1], formatter),
+                        LocalDateTime.parse(parts[1], DATE_TIME_FORMATTER),
                         UUID.fromString(parts[2]),
                         UUID.fromString(parts[3])
                 );
@@ -78,12 +79,9 @@ public class BookingFileDataAccessService implements BookingDAO {
     @Override
     public void save(Booking booking) {
 
-        DateTimeFormatter formatter =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
         String line =
                 booking.getBookingId() + "," +
-                        booking.getTimeOfPurchase().format(formatter) + "," +
+                        booking.getTimeOfPurchase().format(DATE_TIME_FORMATTER) + "," +
                         booking.getUserPurchased() + "," +
                         booking.getCarPurchased();
 
